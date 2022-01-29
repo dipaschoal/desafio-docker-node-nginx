@@ -1,12 +1,15 @@
 version: '3'
 
 services:
+  #Build do Node
   app:
     build:
       context: node
       dockerfile: Dockerfile
     container_name: app
+    hostname: nodejsserver
     entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    command: node index.js
     networks:
       - node-network
     volumes:
@@ -17,6 +20,7 @@ services:
     depends_on:
       - db
     image: node:15
+  #Build do mysql
   db:
     image: mysql:5.7
     command: --innodb-use-native-aio=0
@@ -30,18 +34,20 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - node-network
+  #Build do nginx
   nginx:
     build: 
       context: ./nginx
       dockerfile: Dockerfile
-    image: nginx:1.15.0-alpine
+    image: nginx:latest
     container_name: nginx
+    restart: unless-stopped
+    depends_on:
+      - app
     networks:
       - node-network
     ports:
       - "8080:80"
-
-
 networks:
   node-network:
     driver: bridge
