@@ -9,6 +9,7 @@ services:
     container_name: app
     hostname: nodejsserver
     entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    restart: unless-stopped
     command: node index.js
     networks:
       - node-network
@@ -20,10 +21,11 @@ services:
       - "3000:3000"
     depends_on:
       - db
-    image: node:alpine
+    image: node:15
   #Build do mysql
   db:
     image: mysql:5.7
+    hostname: db
     command: --innodb-use-native-aio=0
     container_name: db
     restart: always
