@@ -8,18 +8,21 @@ services:
       dockerfile: Dockerfile
     container_name: app
     hostname: nodejsserver
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    # entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
     command: node index.js
     networks:
       - node-network
     volumes:
       - ./node:/usr/src/app
+      - exclude:/usr/src/app/node_modules/
     tty: true
     ports:
       - "3000:3000"
     depends_on:
       - db
-    image: node:15
+    image: node:alpine
+
+
   #Build do mysql
   db:
     image: mysql:5.7
@@ -34,6 +37,7 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - node-network
+
   #Build do nginx
   nginx:
     build: 
@@ -48,6 +52,10 @@ services:
       - node-network
     ports:
       - "8080:80"
+
 networks:
   node-network:
     driver: bridge
+
+volumes:
+  exclude:
