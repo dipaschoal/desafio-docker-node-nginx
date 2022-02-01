@@ -10,7 +10,7 @@ services:
     hostname: nodejsserver
     entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
     restart: unless-stopped
-    command: node index.js
+    command: npm start
     networks:
       - node-network
     volumes:
