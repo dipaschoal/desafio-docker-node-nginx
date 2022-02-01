@@ -17,7 +17,7 @@ const sql_create = `CREATE TABLE IF NOT EXISTS people (
                     name VARCHAR(255) NOT NULL,
                     data VARCHAR(255)) ENGINE=INNODB`
 
-const sql_insert = `INSERT INTO people (name, data) values('Diogo', NOW())`
+const sql_insert = `INSERT INTO people (name, data) values('Diogo', CONVERT_TZ(NOW(),'SYSTEM','America/Sao_Paulo'))`
 
 const sql_list = `SELECT * FROM people ORDER BY id DESC`
 
