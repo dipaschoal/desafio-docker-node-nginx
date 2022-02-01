@@ -38,7 +38,7 @@ app.get('/',(req,res) => {
 
         this.table = '<h1>Full Cycle Rocks!</h1><table><tr><th>id</th><th>name</th><th>data</th></tr>'+this.table+'</table>'
 
-        console.log(this.table)
+        // console.log(this.table)
         res.send(this.table)
         con.end()
     })
